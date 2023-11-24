@@ -9,25 +9,15 @@ from config import init_args
 from logger import logger
 
 class Crawler:
-    def __init__(self, args: argparse.Namespace, logger: logger):
-        self.output_file = args.output
-    
+    def __init__(self, outpu_file: str, logger: logger):
+        self.output_file = outpu_file
         logger.info("Crawler initialized")
-
-    def run(self):
-        pass
-
-if __name__ == '__main__':
-    # get the arguments
-    args = init_args()
-
-    # check the arguments
-    if not args:
-        exit(1)
     
-    # setup the logger
-    logger = logger(args.logfile, name='[Crawler] ')
-
-    # create the crawler
-    crawler = Crawler(args, logger)
-
+    def __str__(self):
+        return "Crawler to crawl abstracts from the web"
+    
+    def run(self):
+        print("Crawler started")
+        print("Crawler finished")
+        
+        
