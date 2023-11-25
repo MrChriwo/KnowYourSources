@@ -1,6 +1,5 @@
-import argparse
 from config import init_args
-from logger import logger
+from logger import Logger
 from manager import CrawlerManager
 
 if __name__ == '__main__':
@@ -12,7 +11,7 @@ if __name__ == '__main__':
         exit(1)
     
     # setup the logger
-    logger = logger(args.logfile, name='[Crawler] ')
+    logger = Logger(args.logfile, name='Crawler')
 
     # create the crawler
     crawler = CrawlerManager(args, logger)
