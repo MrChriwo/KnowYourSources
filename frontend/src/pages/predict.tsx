@@ -1,11 +1,12 @@
 import { Button} from "react-bootstrap";
+import AbstractFrame from "../abstractFrame/AbstractFrame";
 
 
 const Predict = () => {
     return (
         <div className="page">
-        <h1>Predict</h1>
-        <Button variant="primary">Primary</Button>
+        <h1>Find the best papers for your work</h1>
+        <AbstractFrame/>
         </div>
     );
 };

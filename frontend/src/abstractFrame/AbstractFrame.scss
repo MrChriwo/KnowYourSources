@@ -1,0 +1,16 @@
+.abstract-message { 
+    border-style: solid;
+
+    min-height: 54vh !important; 
+    width: 71%; 
+    max-height: 54vh !important;
+    overflow-y: auto;
+
+    .message-text { 
+        margin-top: 2%;
+        max-width: 90%;
+        padding: 1rem;
+        background-color: rgb(8, 70, 70);
+        border-radius: 2%;
+    }
+}
