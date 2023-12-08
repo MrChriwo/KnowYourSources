@@ -1,11 +1,14 @@
 import './App.scss'
-import { Button } from 'react-bootstrap'
-function App() {
+import {Routes, Route} from 'react-router-dom'
+
+const App = () => {
 
   return (
     <>
-    <Button variant="primary">Primary</Button>{' '}
-
+      <Routes>
+        <Route path="/" element={<h1>Home</h1>} />
+        <Route path="/about" element={<h1>About</h1>} />
+      </Routes>
 
     </>
   )
