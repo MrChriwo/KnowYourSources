@@ -1,6 +1,4 @@
-import { Button} from "react-bootstrap";
-import AbstractFrame from "../abstractFrame/AbstractFrame";
-
+import AbstractFrame from "../components/abstractFrame/AbstractFrame";
 
 const Predict = () => {
     return (
