@@ -1,0 +1,26 @@
+.recommendation-list-header { 
+    padding-right: 10%;
+}
+
+.recommendation-list-inner { 
+    min-height: 52vh;
+    max-height: 52vh;
+    overflow-y: auto;
+}
+
+.recommendation-item { 
+    width: 95%;
+    transition: 0.7s ease-in-out;
+    border-style: solid !important;
+    border-width: 0.4vh;
+    border-color: rgb(8, 70, 70);
+    border-radius: 1.2% !important;
+    &:hover {
+        cursor: pointer;
+        box-shadow: 0 0 10px rgb(11, 86, 47);
+        * {
+            size: 1.2rem;
+ 
+        }
+    }
+}

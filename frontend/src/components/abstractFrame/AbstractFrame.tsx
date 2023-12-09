@@ -20,7 +20,7 @@ const AbstractFrame = () => {
   };
 
   return (
-    <Row>
+    <div className='row abstract-frame d-flex justify-content-center'>
       <div className="abstract-message mb-3">
           {abstract !== '' ? (
             <div className="message-text">
@@ -31,8 +31,9 @@ const AbstractFrame = () => {
             <h4 className="d-flex justify-content-center">No Abstract yet</h4>
           )}
       </div>
+      <div className="send-message-form d-flex justify-content-center">
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="exampleForm.ControlTextarea1">
+        <Form.Group>
           <Row>
             <Col xs={8}>
               <Form.Control
@@ -50,7 +51,8 @@ const AbstractFrame = () => {
           </Row>
         </Form.Group>
       </Form>
-    </Row>
+      </div>
+    </div>
   );
 };
 
