@@ -1,0 +1,9 @@
+version: "3"
+
+services: 
+  web:
+    container_name: knowyoursources-frontend
+    build: frontend/
+    ports:
+      - "80:80"
+

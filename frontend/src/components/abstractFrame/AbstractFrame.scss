@@ -1,0 +1,40 @@
+.abstract-frame { 
+    .col-8 { 
+        padding: 0 !important;
+    }
+}
+
+.abstract-message { 
+    border-style: solid;
+
+    min-height: 54vh !important; 
+    width: 71%; 
+    max-height: 54vh !important;
+    overflow-y: auto;
+    width: 85%;
+
+    .message-text { 
+        margin-top: 2%;
+        max-width: 90%;
+        padding: 1rem;
+        background-color: rgb(8, 70, 70);
+        border-radius: 2%;
+    }
+}
+
+.send-message-form { 
+    width: 85% !important; 
+
+    form { 
+        width: 100% !important;
+    }
+}
+
+
+@media screen and (max-width: 768px){ 
+
+    form { 
+        margin-bottom: 7%;
+    
+}
+}
