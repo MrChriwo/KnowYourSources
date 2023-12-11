@@ -11,19 +11,22 @@ jobs:
   deploy-frontend:
     runs-on: ubuntu-latest
 
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
-          ssh-passphrase: ${{ secrets.PASSPHRASE }}
+        env:
+          SSH_PASSPHRASE: ${{secrets.PASSPHRASE}}
+          SSH_PRIVATE_KEY: ${{secrets.SSH_KEY}}
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          echo "$SSH_PASSPHRASE" > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add - >/dev/null
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd ${{ secrets.SERVER_FRONTEND_PATH }}
           git pull
           cd ..
