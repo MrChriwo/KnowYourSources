@@ -15,20 +15,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up SSH
-        env:
-          SSH_PASSPHRASE: ${{secrets.PASSPHRASE}}
-          SSH_PRIVATE_KEY: ${{secrets.SSH_KEY}}
-        run: |
-          eval $(ssh-agent -s)
-          echo "$SSH_PASSPHRASE" > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add - >/dev/null
-           
-      - name: Deploy to server
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          cd ${{ secrets.SERVER_FRONTEND_PATH }}
-          git pull
-          cd ..
-          docker-compose up -d --build
-          EOF
+      - name: deploy on server
+        uses: appleboy/ssh-action@v1.0.0
+        with: 
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd ${{ secrets.SERVER_FRONTEND_PATH }}
+            git pull
+            docker-compose up -d --build
