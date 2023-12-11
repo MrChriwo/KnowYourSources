@@ -20,10 +20,10 @@ jobs:
           SSH_PASSPHRASE: ${{secrets.PASSPHRASE}}
           SSH_PRIVATE_KEY: ${{secrets.SSH_KEY}}
         run: |
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          eval $(ssh-agent -s)
           echo "$SSH_PASSPHRASE" > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add - >/dev/null
-
+           
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
