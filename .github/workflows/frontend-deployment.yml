@@ -5,7 +5,7 @@ on:
     branches:
       - Feat/frontend-user-input
     paths:
-      - 'frontend/**'
+      - 'frontend/**/*'
 
 jobs:
   deploy-frontend:
