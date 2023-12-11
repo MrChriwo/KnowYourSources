@@ -3,7 +3,7 @@ name: frontend-deployment
 on:
   push:
     branches:
-      - Feat/frontend-user-input
+      - dev
     paths:
       - 'frontend/**/*'
 
@@ -25,7 +25,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << EOF
           cd ${{ secrets.SERVER_FRONTEND_PATH }}
-          git checkout Feat/frontend-user-input
           git pull
           cd ..
           docker-compose up -d --build
