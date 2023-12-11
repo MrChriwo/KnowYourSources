@@ -1,0 +1,32 @@
+name: frontend-deployment
+
+on:
+  push:
+    branches:
+      - Feat/frontend-user-input
+    paths:
+      - 'frontend/**'
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+          ssh-passphrase: ${{ secrets.PASSPHRASE }}
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << EOF
+          cd ${{ secrets.SERVER_FRONTEND_PATH }}
+          git checkout Feat/frontend-user-input
+          git pull
+          cd ..
+          docker-compose up -d --build
+          EOF
