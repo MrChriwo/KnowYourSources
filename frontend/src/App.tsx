@@ -9,7 +9,6 @@ const App = () => {
 
   return (
     <div className='app'>
-      Tihs is a ci/cd test
       <TopBanner/>
       <Row>
         {/* Sidebar */}
