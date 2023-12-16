@@ -2,18 +2,36 @@
 import os
 import argparse
 import logging
+import requests
+
 
 __prefix__ = '[Crawler]'
 
 
-
 def get_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='Crawler for the abstracts of the web')
-    parser.add_argument('--output', help='defines the output file', required=False)
+    parser.add_argument('--source', help='defines the source on kaggle', required=True)
+    parser.add_argument('--target', help='defines the target column to crawl', nargs="+" ,required=True)
+    # parser.add_argument('--output', help='defines the output file', required=False, default="output.txt")
     parser.add_argument('--workers', help='defines the number of crawler workers', required=False, default="1")
-    parser.add_argument('--logfile', help='defines the log file', required=False)
+    parser.add_argument('--logfile', help='defines the log file', required=False, default="crawler.log")
     args = parser.parse_args()
     return args
+
+def check_source(url): 
+    url = f"https://www.kaggle.com/datasets/{url}"
+    try:
+        response = requests.get(url)
+        if response.status_code != 200:
+            print(f'{__prefix__} The source is not valid')
+            return False
+        else:
+            print(f'{__prefix__} source is valid')
+            return True
+    except Exception as e:
+        print(f'{__prefix__} Error while checking the source: {e}')
+        return False
+
 
 def create_file(target) -> bool:
     print(f'{__prefix__} Creating file...\n')
@@ -47,9 +65,18 @@ def create_file(target) -> bool:
 
 # checking the arguments
 def check_arguments(args: argparse.Namespace) -> bool:
-    if args.output is not None and not os.path.exists(args.output):
-        if not create_file(args.output):
+    print(type(args.target))
+    if args.source == "":
+        print(f"{__prefix__} The source is not defined")
+        return False
+    else: 
+        if not check_source(args.source):
             return False
+
+    # if args.output is not None and not os.path.exists(args.output):
+    #     if not create_file(args.output):
+    #         return False
+        
     if args.logfile is not None and not os.path.exists(args.logfile):
         if not create_file(args.logfile):
             return False
