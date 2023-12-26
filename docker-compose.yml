@@ -8,6 +8,7 @@ version: "3"
 # crawler:                    to download, unzip and parse data from kaggle and push it to kafka
 # qdrant-vector-db:           Vector database to store vectors / embeddings and perform the similarity search
 # web:                        Frontend service to provide a UI with react + typescript
+# nginx:                      Nginx service to provide a reverse proxy to the frontend and vector db
 
 # ================== Description of KnowYourSources Services ==================
 
@@ -58,3 +59,16 @@ services:
     volumes:
       - ./qdrant_data:/qdrant/storage/
 
+  nginx:
+    container_name: knowyoursources-nginx
+    build: .
+    ports:
+      - "80:80"  
+    environment:
+      - NGINX_SERVER_NAME=${DEPLOYMENT_SERVER_NAME}
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - qdrant-vector-db
+      - web
+    entrypoint: ["nginx", "-g", "daemon off;"]
