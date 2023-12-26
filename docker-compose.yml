@@ -1,9 +1,25 @@
 version: "3"
 
+# ================== Description of KnowYourSources Services ==================
+
+# crawler:                    to download, unzip and parse data from kaggle and push it to kafka
+# qdrant-vector-db:           Vector database to store vectors / embeddings and perform the similarity search
+# web:                        Frontend service to provide a UI with react + typescript
+
+# ================== Description of KnowYourSources Services ==================
+
 services: 
+
+  crawler:
+    container_name: knowyoursources-crawler
+    build: crawler/
+
   web:
     container_name: knowyoursources-frontend
     build: frontend/
-    ports:
-      - "80:80"
 
+  qdrant-vector-db:
+    container_name: knowyoursources-qdrant-vector-db
+    image: qdrant/qdrant
+    volumes:
+      - ./qdrant_data:/qdrant/storage/
