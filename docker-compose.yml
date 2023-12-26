@@ -2,6 +2,9 @@ version: "3"
 
 # ================== Description of KnowYourSources Services ==================
 
+# knowyoursources-zookeeper:  Zookeeper service for orchestrating Kafka brokers
+# knowyoursources-kafka-1:    Kafka broker 1 to store data
+# knowyoursources-kafka-2:    Kafka broker 2 to store data
 # crawler:                    to download, unzip and parse data from kaggle and push it to kafka
 # qdrant-vector-db:           Vector database to store vectors / embeddings and perform the similarity search
 # web:                        Frontend service to provide a UI with react + typescript
@@ -10,9 +13,40 @@ version: "3"
 
 services: 
 
+  knowyoursources-zookeeper:
+    container_name: knowyoursources-zookeeper-1
+    image: aimvector/zookeeper:3.6.1
+    build:
+      context: kafka/zookeeper/
+    volumes:
+      - ./kafka/config/zookeeper-1/zookeeper.properties:/kafka/config/zookeeper.properties
+      - ./kafka/data/zookeeper-1/:/tmp/zookeeper/
+
+  knowyoursources-kafka-1:
+    container_name: knowyoursources-kafka-1
+    image: aimvector/kafka:3.6.1
+    build: 
+      context: kafka/
+    volumes:
+      - ./kafka/config/kafka-1/server.properties:/kafka/config/server.properties
+      - ./kafka/data/kafka-1/:/tmp/kafka-logs/
+
+  knowyoursources-kafka-2:
+    container_name: knowyoursources-kafka-2
+    image: aimvector/kafka:3.6.1
+    build: 
+      context: kafka/
+    volumes:
+      - ./kafka/config/kafka-2/server.properties:/kafka/config/server.properties
+      - ./kafka/data/kafka-2/:/tmp/kafka-logs/
+
   crawler:
     container_name: knowyoursources-crawler
     build: crawler/
+    depends_on:
+      - knowyoursources-zookeeper
+      - knowyoursources-kafka-1
+      - knowyoursources-kafka-2
 
   web:
     container_name: knowyoursources-frontend
@@ -23,3 +57,4 @@ services:
     image: qdrant/qdrant
     volumes:
       - ./qdrant_data:/qdrant/storage/
+
