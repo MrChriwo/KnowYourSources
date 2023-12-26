@@ -49,6 +49,21 @@ services:
       - knowyoursources-kafka-1
       - knowyoursources-kafka-2
 
+  knowyoursources-embedder: 
+    container_name: knowyoursources-embedder
+    build: embedding_service/
+    environment:
+      - COLLECTION_NAME=${QDRANT_COLLECTION_NAME}
+    volumes:
+      - ./embedding_service/:/app/
+    depends_on:
+      - knowyoursources-zookeeper
+      - knowyoursources-kafka-1
+      - knowyoursources-kafka-2
+      - qdrant-vector-db
+
+    command: ["python", "embedder.py", "--collection", "${QDRANT_COLLECTION_NAME}"]
+
   web:
     container_name: knowyoursources-frontend
     build: frontend/

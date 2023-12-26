@@ -12,11 +12,13 @@
 # GitHub: Mr_Chriwo
 
 param (
-    [string]$DEPLOYMENT_SERVER_NAME
+    [string]$DEPLOYMENT_SERVER_NAME,
+    [string]$QDRANT_COLLECTION_NAME
 )
 
 # Set environment variables
 $env:DEPLOYMENT_SERVER_NAME = $DEPLOYMENT_SERVER_NAME
+$env:QDRANT_COLLECTION_NAME = $QDRANT_COLLECTION_NAME
 
 # Check if nginx.conf exists
 $nginxConfPath = Join-Path $PSScriptRoot "nginx.conf"
