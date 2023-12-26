@@ -11,6 +11,7 @@
 
 # Example: .\start_services.ps1 "example.com" "myCollection"
 # replace example.com with your own server name or localhost for local development
+# replace myCollection with your own collection name
 
 # GitHub: Mr_Chriwo
 
