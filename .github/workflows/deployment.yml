@@ -1,14 +1,12 @@
-name: frontend-deployment
+name: deployment-flow
 
 on:
   push:
-    branches:
-      - dev
-    paths:
-      - 'frontend/**/*'
+    tags:
+      - '*'
 
 jobs:
-  deploy-frontend:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
