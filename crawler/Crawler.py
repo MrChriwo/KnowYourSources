@@ -1,6 +1,6 @@
 # make this script callable via cli with parameters
 __author__ = "Mr_Chriwo"
-__version__ = "0.0.1"
+__version__ = "1.0.0"
 __maintainer__ = "Mr_Chriwo"
 __status__ = "Development"
 
@@ -88,7 +88,6 @@ class Crawler:
             conn = sqlite3.connect(self.db_path)
             c = conn.cursor()
 
-            # Assuming 'kaggle_source' is a string, make sure to use quotes in the SQL query
             c.execute(f"SELECT chunk_index FROM current_jobs WHERE name = '{self.kaggle_source}'")
             current_job = c.fetchone()
 
