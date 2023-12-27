@@ -108,7 +108,7 @@ class CrawlerManager:
         
     def start_workers(self):
         try:
-            # self.download_and_unzip_source()
+            self.download_and_unzip_source()
             self.logger.info(f"searching data...")
             file_path, file_extension = self.search_for_file()
             self.file_path = file_path
