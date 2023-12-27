@@ -87,13 +87,12 @@ class CrawlerManager:
                 # for linux
                 unzip_command = f"unzip {zip_file} -d {self.cwd}"
                 subprocess.run(unzip_command, shell=True)
-                self.logger.info(f"unzipped archive successfully")
 
                 # for windows
                 # unzip_command = f"Expand-Archive -Path {zip_file} -DestinationPath {self.cwd}"
                 # subprocess.run(["powershell", "-Command", unzip_command], shell=True)
 
-                # os.remove(zip_file)
+                os.remove(zip_file)
 
                 self.logger.info(f"unzipped archive successfully")
 
@@ -109,7 +108,7 @@ class CrawlerManager:
         
     def start_workers(self):
         try:
-            self.download_and_unzip_source()
+            # self.download_and_unzip_source()
             self.logger.info(f"searching data...")
             file_path, file_extension = self.search_for_file()
             self.file_path = file_path
@@ -124,7 +123,7 @@ class CrawlerManager:
         self.logger.info(f'Starting {self.workers} crawler worker(s)')
 
         for _ in range(self.workers):
-            crawler = Crawler(self.cols_to_crawl, self.logger, self.extension, self.file_path ) #self.output_file
+            crawler = Crawler(self.cols_to_crawl, self.logger, self.extension, self.file_path, self.source ) #self.output_file
             thread = threading.Thread(target=crawler.run)
             thread.start()
             self.crawlers.append(crawler)

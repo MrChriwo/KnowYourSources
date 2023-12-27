@@ -14,7 +14,7 @@ def get_arguments() -> argparse.Namespace:
     parser.add_argument('--target', help='defines the target column to crawl', nargs="+" ,required=True)
     # parser.add_argument('--output', help='defines the output file', required=False, default="output.txt")
     parser.add_argument('--workers', help='defines the number of crawler workers', required=False, default="1")
-    parser.add_argument('--logfile', help='defines the log file', required=False, default="crawler.log")
+    parser.add_argument('--logfile', help='defines the log file', required=False, default="data/crawler.log")
     args = parser.parse_args()
     return args
 

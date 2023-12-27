@@ -44,6 +44,8 @@ services:
   crawler:
     container_name: knowyoursources-crawler
     build: crawler/
+    volumes:
+      - ./crawler/data/:/app/data/
     depends_on:
       - knowyoursources-zookeeper
       - knowyoursources-kafka-1
