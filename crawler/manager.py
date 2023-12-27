@@ -12,24 +12,12 @@ class CrawlerManager:
         self.source = args.source
         self.cols_to_crawl = args.target # always a list
         self.cwd = os.getcwd()
-        self.data = pd.DataFrame()
+        self.file_path = ""
+        self.extension = ""
 
         self.logger = logger
         self.workers = int(args.workers) if args.workers is not None else 1
         self.crawlers = []
-
-    def read_data(self, path: str, extension: str = None):
-        self.logger.info(f"reading data...")
-        if extension == "csv":
-            for index, chunk in enumerate(pd.read_csv(path, chunksize=1000, lines=True)):
-                print(f'reading chunk: {index}\r', end='', flush=True)
-                self.data = pd.concat([self.data, chunk])
-        elif extension == "json":
-            for index, chunk in enumerate(pd.read_json(path, chunksize=1000, lines=True)):
-                print(f'reading chunk: {index}\r', end='', flush=True)
-                self.data = pd.concat([self.data, chunk])
-        else: 
-            raise Exception(f"unknown file extension {extension}")
 
 
     def check_file_extension(self, file_name: str):
@@ -113,19 +101,19 @@ class CrawlerManager:
             self.logger.error(f"Error while pre-processing source: {e}")
             raise e
     
-    def check_target_columns(self):
-        # check if the target column exists
-        if not (col in self.data.columns for col in self.cols_to_crawl):
-            self.logger.error(f"target column {self.cols_to_crawl} does not exist")
-            raise Exception(f"target column {self.cols_to_crawl} does not exist")
+    # def check_target_columns(self):
+    #     # check if the target column exists
+    #     if not (col in self.data.columns for col in self.cols_to_crawl):
+    #         self.logger.error(f"target column {self.cols_to_crawl} does not exist")
+    #         raise Exception(f"target column {self.cols_to_crawl} does not exist")
         
     def start_workers(self):
         try:
             self.download_and_unzip_source()
             self.logger.info(f"searching data...")
             file_path, file_extension = self.search_for_file()
-            self.read_data(file_path, file_extension)
-            self.check_target_columns()
+            self.file_path = file_path
+            self.extension = file_extension
         except Exception as e:
             self.logger.error(f"Error while starting workers: {e}")
             raise e
@@ -136,7 +124,7 @@ class CrawlerManager:
         self.logger.info(f'Starting {self.workers} crawler worker(s)')
 
         for _ in range(self.workers):
-            crawler = Crawler(self.data, self.cols_to_crawl, self.logger) #self.output_file
+            crawler = Crawler(self.cols_to_crawl, self.logger, self.extension, self.file_path ) #self.output_file
             thread = threading.Thread(target=crawler.run)
             thread.start()
             self.crawlers.append(crawler)
