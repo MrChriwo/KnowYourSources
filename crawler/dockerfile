@@ -20,8 +20,9 @@ RUN apk add --no-cache \
     make \
     wget
 
+RUN mkdir /root/.kaggle
 
-COPY .kaggle /root/
+COPY .kaggle/kaggle.json /root/.kaggle/
 
 RUN cd /tmp && git clone https://github.com/edenhill/librdkafka.git && \
   cd librdkafka && git checkout tags/v2.3.0 && \

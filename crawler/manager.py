@@ -77,6 +77,7 @@ class CrawlerManager:
                     return os.path.join(root, file)
                 else:
                     continue     
+        return None
 
 
 
@@ -94,17 +95,19 @@ class CrawlerManager:
             self.logger.info(f"unzipping archive")
             zip_file = self.find_zip_file()
 
-            # for windows
+            if zip_file is not None:
+                # for linux
+                unzip_command = f"unzip {zip_file} -d {self.cwd}"
+                subprocess.run(unzip_command, shell=True)
+                self.logger.info(f"unzipped archive successfully")
 
-            # unzip_command = f"Expand-Archive -Path {zip_file} -DestinationPath {self.cwd}"
-            # subprocess.run(["powershell", "-Command", unzip_command], shell=True)
+                # for windows
+                # unzip_command = f"Expand-Archive -Path {zip_file} -DestinationPath {self.cwd}"
+                # subprocess.run(["powershell", "-Command", unzip_command], shell=True)
 
-            # for linux
-            unzip_command = f"unzip {zip_file} -d {self.cwd}"
-            subprocess.run(unzip_command, shell=True)
+                # os.remove(zip_file)
 
-            self.logger.info(f"unzipped archive successfully")
-            os.remove(zip_file)
+                self.logger.info(f"unzipped archive successfully")
 
         except Exception as e:
             self.logger.error(f"Error while pre-processing source: {e}")
@@ -119,7 +122,6 @@ class CrawlerManager:
     def start_workers(self):
         try:
             self.download_and_unzip_source()
-            # finding the csv file and read it to dataframe
             self.logger.info(f"searching data...")
             file_path, file_extension = self.search_for_file()
             self.read_data(file_path, file_extension)
