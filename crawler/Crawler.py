@@ -149,7 +149,7 @@ class Crawler:
                     self.update_current_job(index)
                     time.sleep(2)
 
-                    # self.kafka_producer.flush()
+                    self.kafka_producer.flush()
                     self.produced_batches += 1
                 
                 self.update_finished_jobs()
@@ -166,11 +166,11 @@ class Crawler:
 
                     # Produce the message to Kafka
                     self.kafka_producer.produce(self.kafka_topic, key=str(self.produced_batches), value=json_message)
-                    print(f"Produced batch {index} to Kafka\r", end='', flush=True)
+                    print(f"Produced batch {self.produced_batches} to Kafka\r", end='', flush=True)
                     self.update_current_job(index)
                     time.sleep(2)
 
-                    # self.kafka_producer.flush()
+                    self.kafka_producer.flush()
                     self.produced_batches += 1
                 
                 self.update_finished_jobs()
@@ -199,5 +199,4 @@ class Crawler:
             self.crawl()
             self.logger.info("Crawler run ended")
             self.idle()
-        
         
