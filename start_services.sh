@@ -6,7 +6,7 @@
 # if there is no nginx.conf file, it will rename the nginx_template to nginx.conf
 # according to that make sure you replace the api key in the template to your own api key
 
-# Usage: sh .\start_services.sh <SERVER_NAME> <QDRANT_COLLECTION>
+# Usage: bash .\start_services.sh <SERVER_NAME> <QDRANT_COLLECTION>
 # make sure you have docker and docker-compose installed
 
 # Example: .\start_services.ps1 "example.com" "myCollection"
@@ -27,7 +27,7 @@ if [ ! -f "$nginxConfPath" ]; then
     # If nginx.conf doesn't exist, rename nginx_template to nginx.conf
     nginxTemplatePath="./nginx_template"
 
-    if [ -d "$nginxTemplatePath" ]; then
+    if [ -f "$nginxTemplatePath" ]; then
         mv "$nginxTemplatePath" "$nginxConfPath"
         echo "Renamed 'nginx_template' to 'nginx.conf'."
     else
