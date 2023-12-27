@@ -94,11 +94,14 @@ class CrawlerManager:
             self.logger.info(f"unzipping archive")
             zip_file = self.find_zip_file()
 
-            unzip_command = f"Expand-Archive -Path {zip_file} -DestinationPath {self.cwd}"
+            # for windows
 
-            # unzip_command = f"unzip {zip_file} -d {self.cwd}"
-            # subprocess.run(unzip_command, shell=True)
-            subprocess.run(["powershell", "-Command", unzip_command], shell=True)
+            # unzip_command = f"Expand-Archive -Path {zip_file} -DestinationPath {self.cwd}"
+            # subprocess.run(["powershell", "-Command", unzip_command], shell=True)
+
+            # for linux
+            unzip_command = f"unzip {zip_file} -d {self.cwd}"
+            subprocess.run(unzip_command, shell=True)
 
             self.logger.info(f"unzipped archive successfully")
             os.remove(zip_file)
