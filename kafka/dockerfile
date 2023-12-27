@@ -1,10 +1,12 @@
 FROM openjdk:11.0.10-jre-buster
 
 RUN apt-get update && \
-    apt-get install -y curl
+    apt-get install -y curl \
+    && apt-get install -y dos2unix
          
 ENV KAFKA_VERSION 3.6.1
 ENV SCALA_VERSION 2.13 
+
 
 RUN  mkdir /tmp/kafka && \
     curl "https://archive.apache.org/dist/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz" \
@@ -14,6 +16,7 @@ RUN  mkdir /tmp/kafka && \
 
 COPY start-kafka.sh  /usr/bin
 RUN chmod +x  /usr/bin/start-kafka.sh
+RUN dos2unix /usr/bin/start-kafka.sh
 
-CMD ["start-kafka.sh"]
+CMD ["bash", "start-kafka.sh"]
    

@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 KAFKA_DATA_DIR="/tmp/kafka-logs/"
 
