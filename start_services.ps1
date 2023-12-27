@@ -30,7 +30,7 @@ if (-not (Test-Path $nginxConfPath)) {
     $nginxTemplatePath = Join-Path $PSScriptRoot "nginx_template"
     
     if (Test-Path $nginxTemplatePath) {
-        Rename-Item -Path $nginxTemplatePath -Destination $nginxConfPath
+        Rename-Item -Path $nginxTemplatePath -NewName $nginxConfPath
         Write-Host "Renamed 'nginx_template' to 'nginx.conf'."
     } else {
         Write-Host "'nginx_template' not found."
