@@ -10,7 +10,7 @@ __prefix__ = '[Crawler]'
 
 def get_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='Crawler for the abstracts of the web')
-    parser.add_argument('--source', help='defines the source on kaggle', required=False)
+    parser.add_argument('--source', help='defines the source on kaggle', required=True)
     parser.add_argument('--target', help='defines the target column to crawl', nargs="+" ,required=True)
     # parser.add_argument('--output', help='defines the output file', required=False, default="output.txt")
     parser.add_argument('--workers', help='defines the number of crawler workers', required=False, default="1")
