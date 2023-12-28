@@ -11,12 +11,12 @@ const SidebarNav = () => {
     const [collapsed, setCollapsed] = useState(true);
 
   return (
-    <Sidebar style={{height: "100%"}} collapsed={collapsed} transitionDuration={100} breakPoint='md'>
+    <Sidebar data-bs-theme="dark" style={{height: "100%"}} collapsed={collapsed} transitionDuration={100} breakPoint='md'>
         <div className='sidebar-header d-flex justify-content-center mb-3'>
             <Button variant="dark" onClick={() => setCollapsed(!collapsed)}>{<RxHamburgerMenu/>}</Button>
         </div>
         <Menu>
-            <MenuItem>{<IoIosHome/>} Home</MenuItem>
+            {/* <MenuItem>{<IoIosHome/>} Home</MenuItem> */}
             <MenuItem>{<IoNewspaper/>} Predict</MenuItem>
         </Menu>
           

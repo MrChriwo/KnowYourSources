@@ -1,3 +1,21 @@
 .ps-sidebar-root { 
     font-size: 1.6em;
 }
+
+.ps-sidebar-container {
+    background-color: #272727 !important;
+}
+
+.ps-menu-button {
+    * {
+        transition: 0.3s ease-in-out !important;
+
+    }
+    
+    &:hover {
+        background-color: rgba(205, 201, 201, 0.772) !important;
+        .ps-menu-label {
+            color: black !important;
+        }
+    }
+}
