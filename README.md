@@ -11,6 +11,8 @@
   - [Backend Folder](#backend-folder)
   - [Kafka Folder](#kafka-folder)
   - [Embedding Service](#embedding-service)
+  - [Crawler](#crawler-folder)
+  - [Start Service Scripts](#start-services-scripts)
 - [💡 NLP Model](#nlp-model)
 - [💻 Testing and Self-deployment](#testing-and-deployment)
 
@@ -50,6 +52,42 @@ Within this directory, you'll find the essential configuration files for every K
 ## Embedding Service
 
 Actually the core of our NLP Service! This source code, designed to function as a Kafka consumer, plays an essential role in our system. Operating in batch mode, it efficiently reads incoming messages and seamlessly pushes the corresponding embeddings to the QDrant Vector Database. This critical component ensures that the extracted embeddings are swiftly and accurately integrated into the database.
+
+## Crawler Folder 
+
+The crawler folder encapsulates a vital component of our system, responsible for systematically acquiring data to fuel our knowledge repository. Specifically, the crawler is designed to download a designated dataset from Kaggle, a prominent platform for data science and machine learning resources. This data is then seamlessly transformed into JSON structures and dispatched to our Kafka cluster, forming a crucial part of our project pipeline. The dockerized crawler's functionality is configurable through command-line arguments specified within its Dockerfile.
+
+To ensure data persistence, the crawler integrates an SQLite database, utilizing a 'current_jobs' table to meticulously store the progress of dataset processing. This mechanism proves especially beneficial when dealing with datasets that undergo updates on Kaggle. Upon rerunning the crawler on an augmented dataset, it selectively pushes only the new data to the Kafka/project pipeline, ensuring efficiency and avoiding unnecessary duplication.
+
+Furthermore, the crawler boasts a robust logging service that captures and records valuable information about its operations. These logs are intelligently stored in a file, with the option to mount the file via Docker Compose volume. This logging feature enhances traceability and aids in troubleshooting, enabling a comprehensive understanding of the crawler's behavior and performance. As we continuously refine and optimize our data acquisition processes, the crawler stands as a pivotal element in ensuring the currency and relevance of our knowledge base.
+
+## Start Services Scripts 
+
+The start_services scripts play a pivotal role in the seamless deployment of our KnowYourSources application, offering convenience for both Windows and Linux/Unix users. The start_services.ps1 script is tailored for Windows systems, while start_services.sh is designed for Linux/Unix environments. These scripts come equipped with parameters allowing users to specify the host on which the application runs.
+
+One notable feature of these scripts is their adaptability to varying nginx configurations. In the absence of an existing nginx.conf file, the scripts intelligently employ the nginx template file as the default configuration. This flexibility streamlines the setup process, ensuring a consistent and reliable deployment experience.
+
+To address potential challenges with Kafka broker container stability, the scripts incorporate a robust workaround. They systematically check the status of both brokers, and in the event of a crash, the scripts automatically restart them. This proactive approach helps maintain the integrity and reliability of the Kafka cluster, ensuring continuous and uninterrupted operation.
+
+In summary, the start_services scripts serve as user-friendly entry points for deploying KnowYourSources, accommodating different operating systems and gracefully handling potential Kafka broker disruptions. Their parameterization and adaptive configuration handling contribute to a smooth deployment experience, underscoring our commitment to providing a reliable and hassle-free application environment.
+
+**Note** 
+It's important to note that the start_services.sh script is equipped with Windows line endings, and as such, it requires conversion using tools like dos2unix to ensure compatibility with Linux/Unix systems. This step becomes crucial for a seamless execution of the script on Linux/Unix platforms, as these systems expect different line endings compared to Windows.
+
+
+To install dos2unix on a Linux system using apt (Advanced Package Tool), you can use the following commands:
+
+```bash
+sudo apt update -y
+sudo apt install -y dos2unix
+```
+
+Once installed, you can use dos2unix to convert a file. Here's an example command:
+(Assuming that you run the command inside the KnowYourSources Directory) 
+
+```bash
+dos2unix start_services.sh
+```
 
 # NLP Model
 
