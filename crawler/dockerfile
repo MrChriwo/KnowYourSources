@@ -33,5 +33,3 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 RUN apk del build-base git libffi-dev openssl-dev libc-dev make wget
 
-# Run app.py when the container launches
-CMD ["python3", "main.py", "--source", "Cornell-University/arxiv", "--target", "authors", "abstract", "title", "doi"]

@@ -3,23 +3,29 @@
 # if there is no nginx.conf file, it will rename the nginx_template to nginx.conf
 # according to that make sure you replace the api key in the template to your own api key
 
-# Usage: .\start_services.ps1 -DEPLOYMENT_SERVER_NAME <SERVER_NAME> -QDRANT_COLLECTION_NAME <QDRANT_COLLECTION_NAME>
+# Usage: .\start_services.ps1 -DEPLOYMENT_SERVER_NAME "example.com" -QDRANT_COLLECTION_NAME "knowyoursources"
 # make sure you have docker and docker-compose installed
 
-# Example: .\start_services.ps1 -DEPLOYMENT_SERVER_NAME "example.com" -QDRANT_COLLECTION_NAME "knowyoursources"
+# example: .\start_services.ps1 -DEPLOYMENT_SERVER_NAME "example.com" -QDRANT_COLLECTION_NAME "knowyoursources" -KAGGLE_SOURCE "Cornell-University/arxiv"" -TARGET_CRAWL_COLS "headline" "publish_date" "url" "source" "categories" "authors" "story" "summary" "text"
 # replace example.com with your own server name / ip ( or localhost for local development) 
 # replace knowyoursources with your own collection name
+# replace Cornell-University/arxiv with your own kaggle source
+# replace the target crawl cols with your own target crawl cols
 
 # GitHub: Mr_Chriwo
 
 param (
     [string]$DEPLOYMENT_SERVER_NAME,
-    [string]$QDRANT_COLLECTION_NAME
+    [string]$QDRANT_COLLECTION_NAME, 
+    [string]$KAGGLE_SOURCE,
+    [string[]]$TARGET_CRAWL_COLS
 )
 
 # Set environment variables
 $env:DEPLOYMENT_SERVER_NAME = $DEPLOYMENT_SERVER_NAME
 $env:QDRANT_COLLECTION_NAME = $QDRANT_COLLECTION_NAME
+$env:KAGGLE_SOURCE = $KAGGLE_SOURCE
+$env:TARGET_CRAWL_COLS = $TARGET_CRAWL_COLS
 
 # Check if nginx.conf exists
 $nginxConfPath = Join-Path $PSScriptRoot "nginx.conf"

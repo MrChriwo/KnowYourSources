@@ -50,6 +50,7 @@ services:
       - knowyoursources-zookeeper
       - knowyoursources-kafka-1
       - knowyoursources-kafka-2
+    command: ["python3", "main.py", "--source", "${KAGGLE_SOURCE}", "--target", "${TARGET_CRAWL_COLS}"]
 
   knowyoursources-embedder: 
     container_name: knowyoursources-embedder

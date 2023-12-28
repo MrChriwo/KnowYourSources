@@ -6,20 +6,26 @@
 # if there is no nginx.conf file, it will rename the nginx_template to nginx.conf
 # according to that make sure you replace the api key in the template to your own api key
 
-# Usage: bash ./start_services.sh <SERVER_NAME> <QDRANT_COLLECTION>
+# Usage: bash ./start_services.sh <server_name> <qdrant_collection_name> <kaggle_source> <target_crawl_cols>
 # make sure you have docker and docker-compose installed
 
-# Example: bash ./start_services.sh "localhost" "knowyoursources"
+# Example: bash ./start_services.sh "localhost" "knowyoursources" "Cornell-University/arxiv" "title abstract"
 # replace localhost with your own server name or localhost for local development
 # replace knowyoursources with your own collection name if you want
+# replace Cornell-University/arxiv with your own kaggle source
+# replace title and description with your own target crawl columns
 
 # GitHub: Mr_Chriwo
 
 DEPLOYMENT_SERVER_NAME=$1
 QDRANT_COLLECTION_NAME=$2
+KAGGLE_SOURCE=$3
+TARGET_CRAWL_COLS=$4
 
 export DEPLOYMENT_SERVER_NAME=$DEPLOYMENT_SERVER_NAME
 export QDRANT_COLLECTION_NAME=$QDRANT_COLLECTION_NAME
+export KAGGLE_SOURCE=$KAGGLE_SOURCE
+export TARGET_CRAWL_COLS="${TARGET_CRAWL_COLS[@]}"
 
 nginxConfPath="./nginx.conf"
 

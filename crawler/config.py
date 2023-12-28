@@ -11,7 +11,7 @@ __prefix__ = '[Crawler]'
 def get_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='Crawler for the abstracts of the web')
     parser.add_argument('--source', help='defines the source on kaggle', required=True)
-    parser.add_argument('--target', help='defines the target column to crawl', nargs="+" ,required=True)
+    parser.add_argument('--target', help='defines the target column to crawl', required=True)
     # parser.add_argument('--output', help='defines the output file', required=False, default="output.txt")
     parser.add_argument('--workers', help='defines the number of crawler workers', required=False, default="1")
     parser.add_argument('--logfile', help='defines the log file', required=False, default="data/crawler.log")
@@ -65,7 +65,7 @@ def create_file(target) -> bool:
 
 # checking the arguments
 def check_arguments(args: argparse.Namespace) -> bool:
-    print(type(args.target))
+    args.target = args.target.split(" ")
     if args.source == "":
         print(f"{__prefix__} The source is not defined")
         return False
