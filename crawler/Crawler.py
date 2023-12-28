@@ -48,11 +48,11 @@ class Crawler:
                       name TEXT,
                       chunk_index INTEGER,
                       timestamp REAL)''')
-            c.execute('''
-                        CREATE TABLE IF NOT EXISTS finished_jobs (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        name TEXT,
-                        timestamp REAL)''')
+            # c.execute('''
+            #             CREATE TABLE IF NOT EXISTS finished_jobs (
+            #             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            #             name TEXT,
+            #             timestamp REAL)''')
             
             conn.commit()
             self.logger.info("Database initialized!")
@@ -63,25 +63,25 @@ class Crawler:
             raise e
         
 
-    def check_if_job_finished(self):
-        try:
-            conn = sqlite3.connect(self.db_path)
-            c = conn.cursor()
+    # def check_if_job_finished(self):
+    #     try:
+    #         conn = sqlite3.connect(self.db_path)
+    #         c = conn.cursor()
 
-            c.execute(f"SELECT name FROM finished_jobs WHERE name = '{self.kaggle_source}'")
-            finished_job = c.fetchone()
+    #         c.execute(f"SELECT name FROM finished_jobs WHERE name = '{self.kaggle_source}'")
+    #         finished_job = c.fetchone()
 
-            if finished_job is None:
-                conn.close()
-                return False
-            else:
-                conn.close()
-                return True
+    #         if finished_job is None:
+    #             conn.close()
+    #             return False
+    #         else:
+    #             conn.close()
+    #             return True
 
 
-        except Exception as e:
-            self.logger.error(f"Error while retrieving current job from database: {e}")
-            raise e
+    #     except Exception as e:
+    #         self.logger.error(f"Error while retrieving current job from database: {e}")
+    #         raise e
 
     def handle_current_job(self):
         try:
@@ -119,18 +119,18 @@ class Crawler:
             self.logger.error(f"Error while updating current job in database: {e}")
             raise e
         
-    def update_finished_jobs(self):
-        try:
-            conn = sqlite3.connect(self.db_path)
-            c = conn.cursor()
+    # def update_finished_jobs(self):
+    #     try:
+    #         conn = sqlite3.connect(self.db_path)
+    #         c = conn.cursor()
 
-            c.execute(f"INSERT INTO finished_jobs (name, timestamp) VALUES ('{self.kaggle_source}', '{time.time()}')")
-            conn.commit()
-            conn.close()
+    #         c.execute(f"INSERT INTO finished_jobs (name, timestamp) VALUES ('{self.kaggle_source}', '{time.time()}')")
+    #         conn.commit()
+    #         conn.close()
 
-        except Exception as e:
-            self.logger.error(f"Error while updating finished jobs in database: {e}")
-            raise e
+    #     except Exception as e:
+    #         self.logger.error(f"Error while updating finished jobs in database: {e}")
+    #         raise e
         
     def crawl(self):
         self.logger.info("Crawler starts crawling - batch size: {self.batch_size}}")
@@ -151,7 +151,7 @@ class Crawler:
                     self.kafka_producer.flush()
                     self.produced_batches += 1
                 
-                self.update_finished_jobs()
+                # self.update_finished_jobs()
                 self.logger.info("Crawler finished crawling")
 
             elif self.extension == "json":
@@ -172,7 +172,7 @@ class Crawler:
                     self.kafka_producer.flush()
                     self.produced_batches += 1
                 
-                self.update_finished_jobs()
+                # self.update_finished_jobs()
                 self.logger.info("Crawler finished crawling")
                     
             else: 
@@ -189,13 +189,8 @@ class Crawler:
     def run(self):
         self.logger.info("Crawler started")
         self.init_db()
-        is_finished = self.check_if_job_finished()
-        if is_finished:
-            self.logger.info("Job is already finished")
-            self.idle()
-        else:
-            self.handle_current_job()
-            self.crawl()
-            self.logger.info("Crawler run ended")
-            self.idle()
-        
+        self.handle_current_job()
+        self.crawl()
+        self.logger.info("Crawler run ended")
+        self.idle()
+    
