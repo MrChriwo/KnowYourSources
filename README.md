@@ -104,7 +104,8 @@ Example how to run the services on windows machine (.ps1 script):
 
 Example how to run the services on linux systems (.sh script): 
 ```bash
-bash ./start_services.sh "localhost" "knowyoursources" "Cornell-University/arxiv" "title abstract"```
+bash ./start_services.sh "localhost" "knowyoursources" "Cornell-University/arxiv" "title abstract"
+```
 
 # NLP Model
 
