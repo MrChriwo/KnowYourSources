@@ -6,12 +6,12 @@
 # if there is no nginx.conf file, it will rename the nginx_template to nginx.conf
 # according to that make sure you replace the api key in the template to your own api key
 
-# Usage: bash .\start_services.sh <SERVER_NAME> <QDRANT_COLLECTION>
+# Usage: bash ./start_services.sh <SERVER_NAME> <QDRANT_COLLECTION>
 # make sure you have docker and docker-compose installed
 
-# Example: .\start_services.ps1 "example.com" "myCollection"
-# replace example.com with your own server name or localhost for local development
-# replace myCollection with your own collection name
+# Example: bash ./start_services.sh "localhost" "knowyoursources"
+# replace localhost with your own server name or localhost for local development
+# replace knowyoursources with your own collection name if you want
 
 # GitHub: Mr_Chriwo
 
