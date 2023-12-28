@@ -13,6 +13,8 @@
   - [Embedding Service](#embedding-service)
   - [Crawler](#crawler-folder)
   - [Start Service Scripts](#start-services-scripts)
+    - [Description](#script-description)
+    - [Usage](#usage)
 - [💡 NLP Model](#nlp-model)
 - [💻 Testing and Self-deployment](#testing-and-deployment)
 
@@ -63,6 +65,7 @@ Furthermore, the crawler boasts a robust logging service that captures and recor
 
 ## Start Services Scripts 
 
+### Script Description
 The start_services scripts play a pivotal role in the seamless deployment of our KnowYourSources application, offering convenience for both Windows and Linux/Unix users. The start_services.ps1 script is tailored for Windows systems, while start_services.sh is designed for Linux/Unix environments. These scripts come equipped with parameters allowing users to specify the host on which the application runs.
 
 One notable feature of these scripts is their adaptability to varying nginx configurations. In the absence of an existing nginx.conf file, the scripts intelligently employ the nginx template file as the default configuration. This flexibility streamlines the setup process, ensuring a consistent and reliable deployment experience.
@@ -89,6 +92,20 @@ Once installed, you can use dos2unix to convert a file. Here's an example comman
 
 ```bash
 dos2unix start_services.sh
+```
+
+### Usage
+
+Example how to run the services on windows machine (.ps1 script): 
+
+```powershell
+ .\start_services.ps1 -DEPLOYMENT_SERVER_NAME "localhost" -QDRANT_COLLECTION_NAME "knowyoursources"
+
+```
+
+Example how to run the services on linux systems (.sh script): 
+```bash
+bash ./start_services.sh "localhost" "knowyoursources"
 ```
 
 # NLP Model
