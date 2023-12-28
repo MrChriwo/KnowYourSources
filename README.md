@@ -99,14 +99,12 @@ dos2unix start_services.sh
 Example how to run the services on windows machine (.ps1 script): 
 
 ```powershell
- .\start_services.ps1 -DEPLOYMENT_SERVER_NAME "localhost" -QDRANT_COLLECTION_NAME "knowyoursources"
-
+.\start_services.ps1 -DEPLOYMENT_SERVER_NAME "example.com" -QDRANT_COLLECTION_NAME "knowyoursources" -KAGGLE_SOURCE "Cornell-University/arxiv"" -TARGET_CRAWL_COLS "title" "abstract"
 ```
 
 Example how to run the services on linux systems (.sh script): 
 ```bash
-bash ./start_services.sh "localhost" "knowyoursources"
-```
+bash ./start_services.sh "localhost" "knowyoursources" "Cornell-University/arxiv" "title abstract"```
 
 # NLP Model
 
