@@ -34,7 +34,7 @@ The "backend" folder is responsible for handling the server-side logic. It utili
 
 Within this directory, you'll find the essential configuration files for every Kafka broker and its associated Zookeeper service. As the cluster operates, a designated "data" folder is dynamically generated, ensuring persistent data storage capabilities even in the event of system restarts. This meticulous organization guarantees a seamless and reliable operation of the Kafka cluster, with configurations tailored for optimal performance and durability.
 
-#### mbedding_service
+#### embedding_service
 
 Actually the core of our NLP Service! This source code, designed to function as a Kafka consumer, plays an essential role in our system. Operating in batch mode, it efficiently reads incoming messages and seamlessly pushes the corresponding embeddings to the QDrant Vector Database. This critical component ensures that the extracted embeddings are swiftly and accurately integrated into the database.
 
