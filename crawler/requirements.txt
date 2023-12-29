@@ -1,0 +1,4 @@
+kaggle==1.5.16
+pandas==2.1.4
+requests==2.31.0
+confluent_kafka==2.3.0

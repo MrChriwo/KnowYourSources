@@ -1,0 +1,35 @@
+# Use an official Python runtime as a parent image
+FROM python:3.11.5-alpine
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install Linux bash (if not present in the base image)
+RUN apk add --no-cache bash
+
+# Install build dependencies
+RUN apk add --no-cache \
+    build-base \
+    git \
+    libffi-dev \
+    openssl-dev \
+    libc-dev \
+    make \
+    wget
+
+RUN mkdir /root/.kaggle
+
+COPY .kaggle/kaggle.json /root/.kaggle/
+
+RUN cd /tmp && git clone https://github.com/edenhill/librdkafka.git && \
+  cd librdkafka && git checkout tags/v2.3.0 && \
+  ./configure && make && make install && \
+  cd ../ && rm -rf librdkafka
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN apk del build-base git libffi-dev openssl-dev libc-dev make wget
+
