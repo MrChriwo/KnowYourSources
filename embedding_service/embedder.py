@@ -60,7 +60,7 @@ def check_connection(collection_name):
     api_key = os.environ.get("QDRANT_API_KEY")
     host = os.environ.get("HOST")
     try:
-        response = requests.get(f"http://{host}/collections/qdrant/{collection_name}", headers={
+        response = requests.get(f"http://{host}/qdrant/collections/{collection_name}", headers={
             "accept": "*",
             "api-key": api_key
         })
