@@ -6,13 +6,14 @@
 # Usage: .\start_services.ps1 -DEPLOYMENT_SERVER_NAME "example.com" -QDRANT_COLLECTION_NAME "knowyoursources"
 # make sure you have docker and docker-compose installed
 
-# example: .\start_services.ps1 -DEPLOYMENT_SERVER_NAME "example.com" -QDRANT_COLLECTION_NAME "knowyoursources" -KAGGLE_SOURCE "Cornell-University/arxiv"" -TARGET_CRAWL_COLS "headline" "publish_date" "url" "source" "categories" "authors" "story" "summary" "text"
+# example: .\start_services.ps1 -DEPLOYMENT_SERVER_NAME "example.com" -QDRANT_COLLECTION_NAME "knowyoursources" -KAGGLE_SOURCE "Cornell-University/arxiv" -TARGET_CRAWL_COLS "headline", "publish_date" -API_KEY "your_api_key"
 # replace example.com with your own server name / ip ( or localhost for local development) 
 # replace knowyoursources with your own collection name
 # replace Cornell-University/arxiv with your own kaggle source
 # replace the target crawl cols with your own target crawl cols
+# replace your_api_key with your own api key
 
-# GitHub: Mr_Chriwo
+# GitHub: MrChriwo
 
 param (
     [string]$DEPLOYMENT_SERVER_NAME,

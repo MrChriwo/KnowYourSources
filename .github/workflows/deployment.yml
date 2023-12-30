@@ -29,4 +29,4 @@ jobs:
             git pull
             docker compose stop
             dos2unix start_services.sh
-            bash ./start_services.sh ${{ secrets.SERVER_IP }} ${{ secrets.QDRANT_COLLECTION_NAME }} ${{ secrets.KAGGLE_TOPIC }} ${{ secrets.COLS_TO_CRAWL}}
+            bash ./start_services.sh ${{ secrets.SERVER_IP }} ${{ secrets.QDRANT_COLLECTION_NAME }} ${{ secrets.KAGGLE_TOPIC }} ${{ secrets.COLS_TO_CRAWL}} ${{ secrets.API_KEY }}
