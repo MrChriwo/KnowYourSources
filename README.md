@@ -29,6 +29,9 @@ Behind the scenes, our system employs an automated web crawler to fetch a rich d
 
 Furthermore, we have implemented a dedicated embedding service that acts as a Kafka consumer. This service reads the crawled messages and calculates embeddings representations of the textual content. Once a message has been embedded, the resulting vector is stored in a Qdrant vector database. This specialized database enables efficient similarity searches, allowing users to explore related abstracts and discover connections between different scientific works.
 
+The application can be tested [here](http://chriwodev.de)
+
+**Note** Presently, for the similarity search, you'll have to provide the title and abstract in English. Additionally, bear in mind that the development server operates solely through the HTTP protocol, so exercise caution when dealing with sensitive data
 
 # Repository Overview
 
