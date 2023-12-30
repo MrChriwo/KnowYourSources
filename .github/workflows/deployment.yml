@@ -17,17 +17,17 @@ jobs:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           COLLECTION_NAME: ${{ secrets.QDRANT_COLLECTION_NAME }}
           KAGGLE_TOPIC: ${{ secrets.KAGGLE_TOPIC}}
-          COLS_TO_CRAWL: ${{ secrets.COLS_TO_CRAWL}}
-          
+          COLS_TO_CRAWL: ${{ secrets.COLS_TO_CRAWL}}       
         
       - name: deploy on server
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.0.1
         with: 
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          envs: APP_PATH, SERVER_IP, COLLECTION_NAME, KAGGLE_TOPIC, COLS_TO_CRAWL
+          envs: APP_PATH,SERVER_IP,COLLECTION_NAME,KAGGLE_TOPIC,COLS_TO_CRAWL
+          script_stop: true
           script: |
             cd $APP_PATH
             git pull
