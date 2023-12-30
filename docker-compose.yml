@@ -82,6 +82,8 @@ services:
   knowyoursources-backend: 
     container_name: knowyoursources-backend
     build: backend/
+    environment:
+      - FRONTEND_HOST=${DEPLOYMENT_SERVER_NAME}
     ports: 
       - "8000:8000"
     depends_on:
