@@ -3,13 +3,13 @@ import {Routes, Route} from 'react-router-dom'
 import Sidebar from './components/sidebar/Sidebar'
 import Predict from './pages/predict'
 import { Row, Col} from 'react-bootstrap';
-import TopBanner from './components/topBanner/TopBanner';
+// import TopBanner from './components/topBanner/TopBanner';
 
 const App = () => {
 
   return (
-    <div className='app'>
-      <TopBanner/>
+    <div className='app' data-bs-theme="dark">
+      {/* <TopBanner/> */}
       <Row>
         {/* Sidebar */}
         <Col xs={1} className="sidebar">

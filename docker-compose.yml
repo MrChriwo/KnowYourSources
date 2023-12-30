@@ -70,12 +70,26 @@ services:
   web:
     container_name: knowyoursources-frontend
     build: frontend/
+    depends_on:
+      - knowyoursources-backend
 
   qdrant-vector-db:
     container_name: knowyoursources-qdrant-vector-db
     image: qdrant/qdrant
     volumes:
       - ./qdrant_data:/qdrant/storage/
+
+  knowyoursources-backend: 
+    container_name: knowyoursources-backend
+    build: backend/
+    ports: 
+      - "8000:8000"
+    depends_on:
+      - knowyoursources-zookeeper
+      - knowyoursources-kafka-1
+      - knowyoursources-kafka-2
+      - qdrant-vector-db
+      - knowyoursources-embedder
 
   nginx:
     container_name: knowyoursources-nginx

@@ -1,10 +1,11 @@
-from confluent_kafka import Consumer, KafkaError, KafkaException
+from confluent_kafka import Consumer, KafkaError, Producer
 import json
 from qdrant_client import QdrantClient
-from qdrant_client.models import PointStruct, VectorParams, Distance
+from qdrant_client.models import PointStruct, VectorParams, Distance, CollectionsResponse
 import argparse
 from transformers import AutoTokenizer, AutoModel
 import requests
+import threading
 
 # ============================= GET ARGS =============================#
 parser = argparse.ArgumentParser()
@@ -24,19 +25,35 @@ model = AutoModel.from_pretrained('allenai/specter')
 
 
 # ============================= KAFKA CONFIG =============================#
-conf = {
+conf1 = {
     'bootstrap.servers': 'knowyoursources-kafka-1',
     'group.id': 'embedding-service',
     'auto.offset.reset': 'latest',
     'enable.auto.commit': True,
 }
-consumer = Consumer(conf)
-consumer.subscribe(['crawler'])
+
+user_request_conf = {
+    'bootstrap.servers': 'knowyoursources-kafka-2',
+    'enable.auto.commit': True,
+    'client.id': 'embedding-service',
+    'group.id': 'django-responder',
+}
+crawler_consumer = Consumer(conf1)
+crawler_consumer.subscribe(['crawler'])
+
+request_consumer = Consumer(user_request_conf)
+request_consumer.subscribe(['request'])
+
+response_producer = Producer(user_request_conf)
 
 # ==========================================================================#
 
 
 # ============================= QDRANT CONFIG =============================#
+
+
+qdrant_host = "qdrant-vector-db"
+qdrant_client = QdrantClient(host=qdrant_host)
 
 def check_connection(collection_name, host):
     try:
@@ -48,9 +65,6 @@ def check_connection(collection_name, host):
         return True
     except:
         return False
-
-qdrant_host = "qdrant-vector-db"
-qdrant_client = QdrantClient(host=qdrant_host)
 
 # check if qdrant collection exists
 if not check_connection(args.collection, qdrant_host):
@@ -68,8 +82,9 @@ def get_embedding(title, abstract):
     outputs = model(**inputs)
     return  outputs.last_hidden_state[:, 0, :].detach().numpy().flatten()
 
+
 # Function to process a batch of messages
-def process_batch(messages):
+def process_batch(messages, is_crawler):
     global processed_batch
     global message_id
     print("start reading message")
@@ -77,75 +92,131 @@ def process_batch(messages):
     for message in messages:
         value = json.loads(message.value())
 
-        for struct in value:
-            title = struct.get('title', '')
-            authors = struct.get('authors', '')
-            abstract = struct.get('abstract', '')
-            category = struct.get('category', '')
+        if is_crawler:
+            for struct in value:
+                title = struct.get('title', '')
+                authors = struct.get('authors', '')
+                abstract = struct.get('abstract', '')
+                category = struct.get('categories', '')
+                doi = struct.get('doi', '')
 
-            # ============================= EMBEDDING =============================#
-            print("start embedding")
-            embedding = get_embedding(title, abstract)
+                # ============================= EMBEDDING =============================#
+                print("start embedding")
+                embedding = get_embedding(title, abstract)
 
-            document = {
-                    'title': title,
-                    'authors': authors,
-                    'abstract': abstract,
-                    'category': category,
-                    }
+                document = {
+                        'title': title,
+                        'authors': authors,
+                        'abstract': abstract,
+                        'category': category,
+                        'doi': doi,
+                        }
+                
+                print("document title", document['title'] + " recieved")
+                
+                
+                print("start pushing to qdrant")
+                # pushing to qdrant
+                try:
+                    qdrant_client.upsert(
+                            collection_name=args.collection,
+                            points=[
+                                PointStruct(
+                                    id=message_id,
+                                    vector=embedding.tolist(),
+                                    payload=document,
+                                )
+                            ]
+                        )
+                except Exception as e:
+                    print("error occured while pushing to qdrant", e)
+                    continue
+                
+                message_id += 1
+                processed_batch += 1
+                print(f"Processed Batch Job {processed_batch}")
+
+    # ================= for user requests =========================#
+        else: 
+            response = {
+                "title": value["title"],
+                "embedding": get_embedding(value["title"], value["abstract"]).tolist()
+            }
+            response_producer.produce('request_response', json.dumps(response))
+        
+    #=============================================================#
             
-            print("document title", document['title'] + " recieved")
-            
-            
-            print("start pushing to qdrant")
-            # pushing to qdrant
-            try:
-                qdrant_client.upsert(
-                        collection_name=args.collection,
-                        points=[
-                            PointStruct(
-                                id=message_id,
-                                vector=embedding.tolist(),
-                                payload=document,
-                            )
-                        ]
-                    )
-            except Exception as e:
-                print("error occured while pushing to qdrant", e)
+
+#=============================END OF EMBEDDING ================================#
+
+
+
+
+def process_from_crawler():
+    while True:
+        print("start consuming crawler")
+
+        try:
+            messages = crawler_consumer.consume(num_messages=2)
+
+            if len(messages) == 0:
+                print("No messages consumed")
                 continue
-            
-            message_id += 1
-            #=======================================================================#
 
-        processed_batch += 1
-        print(f"Processed Batch Job {processed_batch}")
+            print(f"Consumed {len(messages)} messages")
+            for message in messages:
+                if message.error() is not None:
+                    if message.error().code() == KafkaError._PARTITION_EOF:
+                        continue
+                    else:
+                        print(message.error())
+                        break
+
+            # Process the batch of messages
+            process_batch(messages, True)
 
 
-
-# Consume messages in batches
-while True:
-    print("start consuming")
-
-    try:
-        messages = consumer.consume(num_messages=2)
-
-        if len(messages) == 0:
-            print("No messages consumed")
+        except Exception as e:
+            print("error occured, trying again", e)
             continue
 
-        print(f"Consumed {len(messages)} messages")
-        for message in messages:
-            if message.error() is not None:
-                if message.error().code() == KafkaError._PARTITION_EOF:
-                    continue
-                else:
-                    print(message.error())
-                    break
+def process_user_requests(): 
+    while True:
+        print("start consuming")
 
-        # Process the batch of messages
-        process_batch(messages)
+        try:
+            messages = request_consumer.consume(num_messages=1)
+
+            if len(messages) == 0:
+                print("No messages consumed")
+                continue
+
+            print(f"Consumed {len(messages)} messages")
+            for message in messages:
+                if message.error() is not None:
+                    if message.error().code() == KafkaError._PARTITION_EOF:
+                        continue
+                    else:
+                        print(message.error())
+                        break
+            # Process the batch of messages
+            process_batch(messages, False)
 
 
-    except Exception as e:
-        print("error occured, trying again", e)
-        continue
+        except Exception as e:
+            print("error occured, trying again", e)
+            continue
+
+
+try:
+    crawler_processing = threading.Thread(target=process_from_crawler)
+    user_request_processing = threading.Thread(target=process_user_requests)
+
+    crawler_processing.start()
+    user_request_processing.start()
+
+    crawler_processing.join()
+    user_request_processing.join()
+
+except Exception as e:
+    print("error occured", e)
