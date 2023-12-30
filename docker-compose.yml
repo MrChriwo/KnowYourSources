@@ -82,6 +82,8 @@ services:
   knowyoursources-backend: 
     container_name: knowyoursources-backend
     build: backend/
+    ports: 
+      - "8000:8000"
     depends_on:
       - knowyoursources-zookeeper
       - knowyoursources-kafka-1

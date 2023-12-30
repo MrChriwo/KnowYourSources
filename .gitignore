@@ -1,3 +1,4 @@
 .github/*
 qdrant_data/*
 nginx.conf
+frontend/.*
