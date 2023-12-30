@@ -6,6 +6,7 @@ import argparse
 from transformers import AutoTokenizer, AutoModel
 import requests
 import threading
+import os
 
 # ============================= GET ARGS =============================#
 parser = argparse.ArgumentParser()
@@ -55,9 +56,14 @@ response_producer = Producer(user_request_conf)
 qdrant_host = "qdrant-vector-db"
 qdrant_client = QdrantClient(host=qdrant_host)
 
-def check_connection(collection_name, host):
+def check_connection(collection_name):
+    api_key = os.environ.get("QDRANT_API_KEY")
+    host = os.environ.get("HOST")
     try:
-        response = requests.get(f"http://{host}/collections/{collection_name}")["result"]
+        response = requests.get(f"http://{host}/collections/{collection_name}", headers={
+            "api-key": api_key
+        })
+        response = response.json()
         if response["status"] != "ok":
             print(f"collection {collection_name} does not exist")
             return False
@@ -67,7 +73,7 @@ def check_connection(collection_name, host):
         return False
 
 # check if qdrant collection exists
-if not check_connection(args.collection, qdrant_host):
+if not check_connection(args.collection):
     qdrant_client.recreate_collection(collection_name=args.collection, vectors_config=VectorParams(size=768, distance=Distance.COSINE))
     print(f"collection {args.collection} created")
 

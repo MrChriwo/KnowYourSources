@@ -9,23 +9,26 @@
 # Usage: bash ./start_services.sh <server_name> <qdrant_collection_name> <kaggle_source> <target_crawl_cols>
 # make sure you have docker and docker-compose installed
 
-# Example: bash ./start_services.sh "localhost" "knowyoursources" "Cornell-University/arxiv" "title abstract"
+# Example: bash ./start_services.sh "localhost" "knowyoursources" "Cornell-University/arxiv" "title abstract" "your_api_key"
 # replace localhost with your own server name or localhost for local development
 # replace knowyoursources with your own collection name if you want
 # replace Cornell-University/arxiv with your own kaggle source
 # replace title and description with your own target crawl columns
+# replace your_api_key with your own api key
 
-# GitHub: Mr_Chriwo
+# GitHub: MrChriwo
 
 DEPLOYMENT_SERVER_NAME=$1
 QDRANT_COLLECTION_NAME=$2
 KAGGLE_SOURCE=$3
 TARGET_CRAWL_COLS=$4
+API_KEY=$5
 
 export DEPLOYMENT_SERVER_NAME=$DEPLOYMENT_SERVER_NAME
 export QDRANT_COLLECTION_NAME=$QDRANT_COLLECTION_NAME
 export KAGGLE_SOURCE=$KAGGLE_SOURCE
 export TARGET_CRAWL_COLS="${TARGET_CRAWL_COLS[@]}"
+export API_KEY=$API_KEY
 
 nginxConfPath="./nginx.conf"
 
