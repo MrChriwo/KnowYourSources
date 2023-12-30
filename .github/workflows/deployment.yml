@@ -27,6 +27,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
+          envs: APP_PATH, SERVER_IP, COLLECTION_NAME, KAGGLE_TOPIC, COLS_TO_CRAWL
           script: |
             cd $APP_PATH
             git pull
