@@ -18,7 +18,8 @@ param (
     [string]$DEPLOYMENT_SERVER_NAME,
     [string]$QDRANT_COLLECTION_NAME, 
     [string]$KAGGLE_SOURCE,
-    [string[]]$TARGET_CRAWL_COLS
+    [string[]]$TARGET_CRAWL_COLS,
+    [string]$API_KEY,
 )
 
 # Set environment variables
@@ -26,6 +27,7 @@ $env:DEPLOYMENT_SERVER_NAME = $DEPLOYMENT_SERVER_NAME
 $env:QDRANT_COLLECTION_NAME = $QDRANT_COLLECTION_NAME
 $env:KAGGLE_SOURCE = $KAGGLE_SOURCE
 $env:TARGET_CRAWL_COLS = $TARGET_CRAWL_COLS
+$env:API_KEY = $API_KEY
 
 # Check if nginx.conf exists
 $nginxConfPath = Join-Path $PSScriptRoot "nginx.conf"

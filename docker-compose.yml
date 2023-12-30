@@ -13,7 +13,6 @@ version: "3"
 # ================== Description of KnowYourSources Services ==================
 
 services: 
-
   knowyoursources-zookeeper:
     container_name: knowyoursources-zookeeper-1
     image: aimvector/zookeeper:3.6.1
@@ -56,7 +55,8 @@ services:
     container_name: knowyoursources-embedder
     build: embedding_service/
     environment:
-      - COLLECTION_NAME=${QDRANT_COLLECTION_NAME}
+      - API_KEY=${API_KEY}
+      - HOST=${DEPLOYMENT_SERVER_NAME}
     volumes:
       - ./embedding_service/:/app/
     depends_on:
