@@ -1,9 +1,12 @@
 name: deployment-flow
 
+
 on:
   push:
     tags:
       - '*'
+      
+run-name: deployment of ${{ github.ref_name }}
 
 jobs:
   deploy:
