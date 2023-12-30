@@ -12,6 +12,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        env: 
+          APP_PATH: ${{ secrets.SERVER_FRONTEND_PATH }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          COLLECTION_NAME: ${{ secrets.QDRANT_COLLECTION_NAME }}
+          KAGGLE_TOPIC: ${{ secrets.KAGGLE_TOPIC}}
+          COLS_TO_CRAWL: ${{ secrets.COLS_TO_CRAWL}}
+          
         
       - name: deploy on server
         uses: appleboy/ssh-action@v1.0.0
@@ -21,7 +28,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd ${{ secrets.SERVER_FRONTEND_PATH }}
+            cd $APP_PATH
             git pull
             dos2unix start_services.sh
-            bash ./start_services.sh ${{ secrets.SERVER_IP }} ${{ secrets.QDRANT_COLLECTION_NAME }} ${{ secrets.KAGGLE_TOPIC}} ${{ secrets.COLS_TO_CRAWL}}
+            bash ./start_services.sh $SERVER_IP $COLLECTION_NAME $KAGGLE_TOPIC $COLS_TO_CRAWL
