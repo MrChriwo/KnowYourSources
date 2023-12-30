@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import {Button} from 'react-bootstrap';
-import { IoIosHome } from "react-icons/io";
+// import { IoIosHome } from "react-icons/io";
 import { IoNewspaper } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./Sidebar.scss";
