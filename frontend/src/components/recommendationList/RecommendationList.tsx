@@ -9,7 +9,6 @@ interface Props {
 const RecommendationList = (props: Props) => {
     const { recommendations } = props;
 
-
     const [showRecommendationDetail, setShowRecommendationDetail] = useState<boolean>(true);
     const [selectedRecommendation, setSelectedRecommendation] = useState<responseBody | null>(null);
 

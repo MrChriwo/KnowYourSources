@@ -12,7 +12,7 @@ const LoadingScreen = (props: Props) => {
 
     return (
         <Modal show={show} centered>
-            <Modal.Body>
+            <Modal.Body className="bg-dark">
                 <div>
                     <h3 style={{color: "green"}}className="d-flex justify-content-center mb-4">LOADING</h3>
                     <div className="d-flex justify-content-center">

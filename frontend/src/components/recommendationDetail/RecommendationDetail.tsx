@@ -14,14 +14,14 @@ const RecommendationDetail = (props: Props) => {
 
     return (
         <Modal size="lg" show={show} centered onHide={onHide}>
-            <Modal.Header>
+            <Modal.Header className="bg-dark">
                 <div>
                 <Modal.Title className="mb-2">{recommendation.title}</Modal.Title>
                 <h6>by {recommendation.authors}</h6>
                 <p>Matching to your request: {recommendation.score}</p>
                 </div>
             </Modal.Header>
-            <Modal.Body >
+            <Modal.Body className="bg-dark" >
                 <div style={{maxHeight: "12em" , overflowY: "auto"}} className="d-flex justify-conent-center">
                     {recommendation.abstract}
                 </div>
