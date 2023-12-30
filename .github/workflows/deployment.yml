@@ -22,7 +22,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script_stop: true
           script: |
-            cd $ {{ secrets.SERVER_FRONTEND_PATH }}
+            cd ${{ secrets.SERVER_FRONTEND_PATH }}
             git pull
             dos2unix start_services.sh
             bash ./start_services.sh $SERVER_IP $COLLECTION_NAME $KAGGLE_TOPIC $COLS_TO_CRAWL
