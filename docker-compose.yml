@@ -55,7 +55,7 @@ services:
     container_name: knowyoursources-embedder
     build: embedding_service/
     environment:
-      - API_KEY=${API_KEY}
+      - QDRANT_API_KEY=${API_KEY}
       - HOST=${DEPLOYMENT_SERVER_NAME}
     volumes:
       - ./embedding_service/:/app/
