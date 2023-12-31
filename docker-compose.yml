@@ -63,6 +63,7 @@ services:
       - knowyoursources-zookeeper
       - knowyoursources-kafka-1
       - knowyoursources-kafka-2
+      - nginx
       - qdrant-vector-db
 
     command: ["python", "embedder.py", "--collection", "${QDRANT_COLLECTION_NAME}"]
@@ -91,7 +92,6 @@ services:
       - knowyoursources-kafka-1
       - knowyoursources-kafka-2
       - qdrant-vector-db
-      - knowyoursources-embedder
 
   nginx:
     container_name: knowyoursources-nginx

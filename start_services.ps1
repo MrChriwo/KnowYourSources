@@ -20,7 +20,7 @@ param (
     [string]$QDRANT_COLLECTION_NAME, 
     [string]$KAGGLE_SOURCE,
     [string[]]$TARGET_CRAWL_COLS,
-    [string]$API_KEY,
+    [string]$API_KEY
 )
 
 # Set environment variables

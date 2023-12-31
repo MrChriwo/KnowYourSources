@@ -49,6 +49,8 @@ response_producer = Producer(user_request_conf)
 
 # ==========================================================================#
 
+message_id = 0
+
 
 # ============================= QDRANT CONFIG =============================#
 
@@ -56,32 +58,36 @@ response_producer = Producer(user_request_conf)
 qdrant_host = "qdrant-vector-db"
 qdrant_client = QdrantClient(host=qdrant_host)
 
-def check_connection(collection_name):
+def init_qdrant_connection(collection_name):
+    global message_id
     api_key = os.environ.get("QDRANT_API_KEY")
     host = os.environ.get("HOST")
+
     try:
-        response = requests.get(f"http://{host}/qdrant/collections/{collection_name}", headers={
-            "accept": "*",
-            "api-key": api_key
+        response = requests.get(f"http://{host}/collections/{collection_name}", headers={
+            "api-key": api_key,
         })
         response = response.json()
         if response["status"] != "ok":
             print(f"collection {collection_name} does not exist")
             return False
         print(f"collection {collection_name} found")
+
+        collection = response["result"]
+
+        last_batch_id = collection["points_count"]
+        message_id = last_batch_id
         return True
-    except:
+    except Exception as e:
+        print(f"error init {collection_name}", e)
         return False
 
 # check if qdrant collection exists
-if not check_connection(args.collection):
+if not init_qdrant_connection(args.collection):
     qdrant_client.recreate_collection(collection_name=args.collection, vectors_config=VectorParams(size=768, distance=Distance.COSINE))
     print(f"collection {args.collection} created")
 
 # ==========================================================================#
-
-processed_batch = 0
-message_id = 0
 
 
 def get_embedding(title, abstract):
@@ -92,7 +98,6 @@ def get_embedding(title, abstract):
 
 # Function to process a batch of messages
 def process_batch(messages, is_crawler):
-    global processed_batch
     global message_id
     print("start reading message")
 
@@ -140,8 +145,7 @@ def process_batch(messages, is_crawler):
                     continue
                 
                 message_id += 1
-                processed_batch += 1
-                print(f"Processed Batch Job {processed_batch}")
+                print(f"Processed Batch Job {message_id}")
 
     # ================= for user requests =========================#
         else: 
